@@ -104,13 +104,13 @@ $(function () {
 		console.log("LOGOUT");
 		$().logoutUsuario();
 		localStorage.removeItem('usuario');
-		$('#loginBtn').show();
-		//$("#divNavBar").load(window.location.href + " #divNavBar"); //recargar el div
+		
 		$("#canvas").show();
 		$("#onStart").hide();
 		$("#statusMsg").hide();
 		$('#logoutBtn').hide();
-		$('.logged').hide();
+		$('.logged').hide(); 
+		$('#loginBtn').show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
