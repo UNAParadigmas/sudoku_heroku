@@ -104,10 +104,10 @@ $(function () {
 		console.log("LOGOUT");
 		$().logoutUsuario();
 		localStorage.removeItem('usuario');
+		$('.logged').hide();
 		$('#loginBtn').show();
-		$('#logoutBtn').hide();
 		$("#divNavBar").load(window.location.href + " #divNavBar"); //recargar el div
-		$("#sudoku").show();
+		$("#canvas").show();
 		$("#onStart").hide();
 		$("#statusMsg").hide();
 		$.ajax({
@@ -196,7 +196,7 @@ $(function () {
 			$().creaCanvas([usuario.partida.sudokuUndo], 0);
 		}
 		else{
-			$("#sudoku").show();
+			$("#canvas").show();
 			$("#onStart").hide();
 			$("#statusMsg").hide();
 			$.ajax({
@@ -217,7 +217,7 @@ $(function () {
 	}
 		$("#onStart").hide();
 		$("#statusMsg").hide();
-		$("#sudoku").show();
+		$("#canvas").show();
 	}
 
 

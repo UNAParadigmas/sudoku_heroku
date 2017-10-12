@@ -13,14 +13,30 @@ window.game=game;
 /* DOCUMENT CONTROL*/
 
 $( document ).ready(() => {	
-		$('#btnSave').prop('disabled', true)
+	
+	$('#pauseButton').prop('disabled', true);
+	$("#onPause").hide();
+	if(localStorage.getItem("usuario")){
+		$('.logged').show();
+		$("#canvas").show();
+		$('.notlogged').hide();
+
+		
+	}
+	else{
+		$("#canvas").hide();
+		$('.logged').show();
+		$('.notlogged').show();
+	} 
+		
+	/*	$('#btnSSud{ok}u-master.zipave').prop('disabled', true)
 		$('#btnSolve').prop('disabled', true)
 		$('#btnAccept').prop('disabled', true)
 		$('#btnHint').prop('disabled', true)
 		$('#btnUndo').prop('disabled', true)
 		$('#btnLoad').prop('disabled', true)
 		$('#pauseButton').prop('disabled', true)
-		$("#onPause").hide();
+		$("#onPause").hide();*/
 });		
 
 /*CANVAS CELL SELECTION*/
@@ -78,7 +94,7 @@ timer.addEventListener('started', function (e) {
 });
 
 $('#nuevoJuego').click(function() {
-	$("#sudoku").show();
+	$("#canvas").show();
 	$("#onStart").hide();
 	$("#statusMsg").hide();
 	$('#btnSave').prop('disabled', false)
@@ -105,16 +121,16 @@ $('#nuevoJuego').click(function() {
 $('#pauseButton').click(function () {
 	timer.pause();
 	$('#pauseButton').prop('disabled', true);			
-	$('#sudoku').hide();
+	$('#canvas').hide();
 	$("#onPause").show();
 	$("#statusMsg").show();
-	$('#btnSave').prop('disabled', true)
+/*	$('#btnSave').prop('disabled', true)
 	$('#btnSolve').prop('disabled', true)
 	$('#btnAccept').prop('disabled', true)
 	$('#btnHint').prop('disabled', true)
 	$('#btnUndo').prop('disabled', true)
 	$('#btnLoad').prop('disabled', true)
-	$('#pauseButton').prop('disabled', true)
+	$('#pauseButton').prop('disabled', true)*/
 });
 
 /*BUTTONS ACTION*/
@@ -127,16 +143,17 @@ $("#sel1").change(() => {
 $('#continueBtn').click(() => {
 	timer.start();
 	$('#pauseButton').prop('disabled', false);			
-	$('#sudoku').show();
+	$('#canvas').show();
 	$("#statusMsg").hide();
 });
 
 
 $.fn.creaCanvas = function(vec,seg){
 	$('#mstack').val(''); 
+	$("#canvas").show();
+	
 	mov = 1;
 	let lvl = $('#level option:selected').text();
-	if(lvl == 'Easy')
 		
 	game.clear();
 	game.showSingles = Boolean(lvl == 'Easy');
@@ -169,6 +186,7 @@ $('#loadGame').click( () =>{
 
 $.fn.logoutUsuario = () => {
 	usuario = null;
+	$('.logged').hide();
 
 }
 
