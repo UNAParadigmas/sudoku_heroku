@@ -1,0 +1,284 @@
+<!--
+  @author Denis Rodriguez Viquez
+          Luis Vasquez Quiros
+          Walter Chavez Oviedo
+          Manuel Masis Segura
+  @since 2017
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="lib/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/Login.css" rel="stylesheet">
+
+	<script src="lib/js/jquery.min.js"></script>
+	<script src="lib/js/bootstrap.min.js"></script>
+	<script src="lib/js/chart.min.js"></script>
+	<script src="js/Login.js"></script>
+	<style>
+		html, body {
+			height: 100%;
+		}
+		#statusMsg {
+			height: 540px;
+			width: 100%;
+		}
+	</style>
+</head>
+
+<body>
+<!-- NAV BAR-->
+	<nav class="navbar navbar-inverse bg-inverse">
+		<div class="container-fluid" id="divNavBar">
+			<div class="navbar-header">
+				<a class="navbar-left">
+					<img src="img/icon.png" width="150" height="50">
+				</a>
+			</div>
+			<ul class="nav navbar-nav logged">
+				<li>
+					<a class="btn btn-lg" id="dataBtn" role="button" data-toggle="modal" data-target="#data-modal" >
+						Data
+					</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right notlogged">
+				<li>
+					<a class="btn btn-lg" id="loginBtn" role="button" data-toggle="modal" data-target="#login-modal" href="">
+						<span class="glyphicon glyphicon-user" ></span> Log In / Registro
+					</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right logged">
+				<li>
+					<a class="btn btn-lg preLogin" id="logoutBtn" role="button" href="">
+						<span class="glyphicon glyphicon-log-out" ></span> Log Out
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	
+<!-- CONTAINER -->
+	<div class="container-fluid" style="max-width:97%">
+		<div class="row">		
+			<div class="col-md-3">
+				<div class="panel panel-success" align="center">
+					<div class="panel-heading">New Game</div>
+				</div><br>
+				
+				<div class="panel panel-success inGame" align="center">
+					<div class="panel-heading">Game</div>
+					<div class="panel-body" >
+						<div class="btn-group-vertical">
+							<button type="button" class="btn btn-default inGame" id="btnUndo" onclick="game.undo()">Back</button>
+							<button type="button" class="btn btn-default inGame" id="btnAccept">Accept</button>
+							<button type="button" class="btn btn-default inGame" id="btnHint">Hint</button>
+							<button type="button" class="btn btn-default inGame" id="btnSolve">Solve</button>										
+						</div>
+						<div class="btn-group-vertical">
+							<button type="button" class="btn btn-default inGame" id="btnSave" title='Guardar el progreso.'>Save</button>
+							<button type="button" class="btn btn-default inGame" id="btnLoad" onclick="game.reset()">Restart</button>
+						</div>
+					</div>
+				</div>
+				
+				<div class="panel panel-success" align="center">
+					<div class="panel-heading">Movements Stack</div>
+					<div class="panel-body" align="center">
+						<textarea class="form-control" rows="7" id="mstack" style="resize:none;" readonly></textarea>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="row">
+					<div class="jumbotron" id="statusMsg">
+						<div id="onStart">
+							<h1>Start New Game</h1> 
+							<span style="display:block; height: 20px;"></span>
+							<h4> - Click on start game to play.</h4><br>
+							<h4> - Sign in for adicional options like:</h4>
+							<h4>&emsp; 1) Save the game.</h4>
+							<h4>&emsp; 2) Graphics about your performance.</h4>
+						</div>
+						<div id="onPause" align="center">
+							<h1>Game In Pause</h1> 
+							<span style="display:block; height: 20px;"></span>
+							<button type="button" class="btn btn-default" id="continueBtn">Continue</button>
+						</div>						
+					</div>
+					<div id='sudoku' align="center" class="inGame">
+						<canvas id='canvas' width='541' height='541'>Canvas is not supported by this browser.</canvas>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="panel panel-success" align="center">
+					<div class="panel-heading">Message</div>
+					<div class="panel-body" align="center">
+						<span id = "msg">Nothing To Show Here.</span>
+					</div>
+				</div>
+				<div class="panel panel-success" align="center">
+					<div class="panel-heading">Chronometer</div>
+					<div class="panel-body inGame">
+						<div>
+							<div class="well" id="values">00:00:00</div>
+							<div class="btn-group inGame">
+								<button class="btn btn-default" id="pauseButton">Stop</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-success" align="center">
+					<div class="panel-heading">New Game</div>
+					<div class="panel-body">
+						<div class="form-group" id="difi">
+							<label for="sel">Select Level:</label>
+							<select class="form-control" id="level">
+								<option>Easy</option>
+								<option>Normal</option>
+								<option>Hard</option>
+							</select>
+						</div>
+						<button type="button" class="btn btn-success" id="nuevoJuego">Begin</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- MODALS -->
+	<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<img id="img_logo" src="img/icon.png">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</div>
+
+				<div id="div-forms">
+
+					<!-- Login Form -->
+					<form id="login-form">
+						<div class="modal-body">
+							<div id="div-login-msg">
+								<div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
+								<span id="text-login-msg">Enter your username and password.</span>
+							</div>
+							<input id="login_username" class="form-control" type="text" placeholder="Username" required>
+							<input id="login_password" class="form-control" type="password" placeholder="Password" required>
+						</div>
+						<div class="modal-footer">
+							<div>
+								<button type="submit" class="btn btn-success btn-lg btn-block">Login</button>
+							</div>
+							<div>
+								<button id="login_register_btn" type="button" class="btn btn-link">Register</button>
+							</div>
+						</div>
+					</form>
+
+					<!-- Register Form -->
+					<form id="register-form" style="display:none;">
+						<div class="modal-body">
+							<div id="div-register-msg">
+								<div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
+								<span id="text-register-msg">User Register.</span>
+							</div>
+							<input id="register_name" class="form-control" type="text" placeholder="Name" required>
+							<input id="register_username" class="form-control" type="text" placeholder="Username" required>
+							<input id="register_password" class="form-control" type="password" placeholder="Password" required>							
+							<input id="register_password2" class="form-control" type="password" placeholder="Confirm Password" required>
+						</div>
+						<div class="modal-footer">
+							<div>
+								<button type="submit" class="btn btn-success btn-lg btn-block">Register</button>
+							</div>
+							<div>
+								<button id="register_login_btn" type="button" class="btn btn-link">Log In</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="load-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<img id="img_logo" src="img/icon.png">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<div id="div-register-msg">
+							<div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
+							<span id="text-register-msg">Ingrese el Sudoku pre-generado.</span>
+						</div>
+						<textarea class="form-control" rows="5" id="sudokuText"></textarea>
+					</div>
+					<div align="center">
+						<label>Si selecciona juego nuevo, el progreso no será guardado</label><br>
+						<label>y se tomará como juego perdido en caso de estar incompleto.</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button id="loadGame" type="button" class="btn btn-success btn-lg btn-block">Juego Nuevo</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="data-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+		<br><br>
+		<div class="col-md-6">
+			<div class="panel panel-success" align="center">
+					<div class="panel-heading">
+						Time-Level Graphic
+					</div>
+					<div class="panel-body">
+						<canvas id="line-chart" width="800" height="450"></canvas>
+					</div>
+			</div>		
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-success" align="center">
+					<div class="panel-heading">
+						Games Won Graphic
+					</div>
+					<div class="panel-body">
+						<canvas id="pie-chart" width="800" height="450"></canvas>
+					</div>
+			</div>		
+		</div>
+	
+	
+	</div>
+	
+	<script src="js/timer.js"></script>
+	<script src="js/BitSet.js"></script>
+	<script src="js/Location.js"></script>
+	<script src="js/Cell.js"></script>
+	<script src="js/Grid.js"></script>
+	<script src="js/Board.js"></script>
+	<script src="js/Game.js"></script>
+	<script src="js/Control.js"></script>
+	<script src="js/ChartData.js"></script>
+	
+
+</body>
+
+</html>
