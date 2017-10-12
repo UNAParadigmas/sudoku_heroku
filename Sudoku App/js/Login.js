@@ -104,12 +104,13 @@ $(function () {
 		console.log("LOGOUT");
 		$().logoutUsuario();
 		localStorage.removeItem('usuario');
-		$('.logged').hide();
 		$('#loginBtn').show();
-		$("#divNavBar").load(window.location.href + " #divNavBar"); //recargar el div
+		//$("#divNavBar").load(window.location.href + " #divNavBar"); //recargar el div
 		$("#canvas").show();
 		$("#onStart").hide();
 		$("#statusMsg").hide();
+		$('#logoutBtn').hide();
+		$('.logged').hide();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -125,6 +126,9 @@ $(function () {
 				var val = $('#sel1 option:selected').text();
 				$().creaCanvas(["8.5.....2...9.1...3.........6.7..4..2...5...........6....38.....4....7...1.....9."], 0);
 			});
+			
+			
+			
 
 	});
 
@@ -176,6 +180,7 @@ $(function () {
 			$().loginUsuario(data);
 		} else {
 			console.log("No hay datos de usuario en el local storage");
+			$('#logoutBtn').hide();
 		}
 	}
 	
